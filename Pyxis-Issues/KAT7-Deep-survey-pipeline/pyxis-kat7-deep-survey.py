@@ -22,34 +22,24 @@ import numpy as np
 import pyfits as pf
 from astLib.astWCS import WCS
 
-
-
-
 ## 2. Default variable assignments
 # These are variables that control the behaviour of modules.
 # Here we just set up some reasonable defaults; config files 
 # will almost certainly override them.
 # Set up destination directory for all plots, images, etc.
 DESTDIR_Template = 'plots-${MS:BASE}${-stage<STAGE}'
-#DESTDIR_Template = "${OUTDIR>/}plots-${MS:BASE}"
 #  up base filename for these files
 OUTFILE_Template = '${DESTDIR>/}${MS:BASE}${_s<STEP}${_<LABEL}'
 
-#OUTFILE_Template = "${DESTDIR>/}${MS:BASE}"
 # Extract unpolarized sky models by default
 lsm.PYBDSM_POLARIZED = False     
 # 0 means we make a single image from all channels. Use 1 to
 # make a per-channel cube.
-#im.IMAGE_CHANNELIZE = 0  
-# Default range of channels to process
-ms.CHANRANGE= 2,56,2
-# Default set of interferometers to use -- the "standard" 83
-# baselines, minus all baselines to RT5 (the APERTIF station)
 # default place to look for MSs
 MS_TARBALL_DIR = os.path.expanduser("~/data")
 
 
-# default initial sky model
+# Default initial sky model
 LSM0 = 'Deep-de-initial.lsm.html'
 
 LMS1 = 'Deep-de-cal1.lsm.html'
@@ -72,7 +62,6 @@ LSM_INTRINSIC = "INTRINSIC-flux.lsm.html"
 DESTDIR_Template = "${OUTDIR>/}plots-${MS:BASE}"
 
 
-#FITS_L, FITS_M = "-X", "Y"
 
 FITS_L_AXIS, FITS_M_AXIS = "-L", "M"
 
@@ -82,7 +71,7 @@ FITS_L_AXIS, FITS_M_AXIS = "-L", "M"
 
 PI = numpy.pi
 
-# default dE solution or smoothing intervals
+# Default dE solution or smoothing intervals
 DE_TIME_INTERVAL = 50
 DE_FREQ_INTERVAL = 30
 
@@ -193,7 +182,7 @@ def correlation_factor(src,psf,img,pos_sky,step=None):
 
 def make_clean_model(image="${im.RESTORED_IMAGE}",psf_image="${im.PSF_IMAGE}",lsm0="$LSM0",threshold=8):
 	
-    image, psf_image, lsm0, outfile = interpolate_locals("image psf_image lsm0 outfile")
+    image, psf_image, lsm0 = interpolate_locals("image psf_image lsm0 ")
     lsm.pybdsm_search(image,output=lsm0,threshold=threshold)
     catalog = Tigger.load(lsm0)
     src = catalog.sources
@@ -247,7 +236,7 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
     
     # Direction independent and direction depenendent calibration which considers the dE tags
 def APP_INT(msname="$MS",lsmname="$LSM0",\
-                     beams="$BEAM_PATTERN",output="$LSM_INTRINSIC"):#,options={},tdlsec='${stefcal.STEFCAL_SECTION3}'):
+                     beams="$BEAM_PATTERN",output="$LSM_INTRINSIC"):
                      
 	
                    
@@ -452,7 +441,7 @@ def run_all():
 	
 	
 	
-	info("################# CALIBRATING DIFFENTIAL GAIN (dE): the flyswatter (O.M.Smirnov) ######################")
+	info("################# CALIBRATING DIFFENTIAL GAIN (dE): the flyswatter (O.M.Smirnov) ###################")
 	cal_DD(lsm0=LSMFINAL) 
 	im.make_image(column="CORRECTED_DATA", restore=True, psf=True,restore_lsm=False)
 	image=im.RESTORED_IMAGE 
