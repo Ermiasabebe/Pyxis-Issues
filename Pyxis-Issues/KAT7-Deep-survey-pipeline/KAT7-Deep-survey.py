@@ -39,11 +39,7 @@ arcsecond_deg=3600
 print "=============================================================="
 print "KAT-7 Reduction Pipeline"
 print "=============================================================="
-print Version
 print "=============================================================="
-print "Warning: This script was written for CirX1 and may require some "
-print "tweaking for your specificexperiment"
-print ""
 print "NOTE: that most input are expecting a string, so no need to use \'\' "
 print "Avoid pressing Ctrl+C during a run...wait when for the return key"
 print "=============================================================="

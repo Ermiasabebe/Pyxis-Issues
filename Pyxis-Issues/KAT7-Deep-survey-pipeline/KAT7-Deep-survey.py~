@@ -41,9 +41,6 @@ print "KAT-7 Reduction Pipeline"
 print "=============================================================="
 print Version
 print "=============================================================="
-print "Warning: This script was written for CirX1 and may require some "
-print "tweaking for your specificexperiment"
-print ""
 print "NOTE: that most input are expecting a string, so no need to use \'\' "
 print "Avoid pressing Ctrl+C during a run...wait when for the return key"
 print "=============================================================="
@@ -403,9 +400,6 @@ print '\n----Splitting the source data - for time bin of 10s and channel width o
 
 split(vis=msfile,outputvis=target_vis,datacolumn='corrected',field=srcfield, spw='0',timebin='10s', width='2')
 
-
-
-#split(vis=msfile,outputvis=target_vis,datacolumn='corrected',field=phasecal, spw='0',timebin='10s', width='2')
 
 plotms(vis = target_vis, xaxis='channel')
 
