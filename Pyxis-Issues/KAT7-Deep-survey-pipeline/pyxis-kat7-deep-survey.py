@@ -353,7 +353,7 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
            
                 
     
-def cal_DI(msname="$MS", lsm0='$LSM0', timeint=None,freqint=None,smooth=None,start=1, stop=5,**kw): # you can assign start and stop to None
+def cal_DI(msname="$MS", lsm0='$LSM0', timeint=None,freqint=None,smooth=None,start=1, stop=5,**kw): 
     """ Run pipeline on a single MS"""
    
    
