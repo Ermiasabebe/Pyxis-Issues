@@ -29,7 +29,7 @@ k = 1.38e03;
 
 eff = 0.7
 
-tsys = 25
+tsys = 30
 
 degrad=180/pi
 arcsecond_deg=3600
@@ -83,12 +83,12 @@ acal_std_name['3C48'] = frozenset(['3C48','3C 48',
 acal_std_name['1934-638'] = frozenset(['1934-638','PKSJ1939-6342','PKS 1934-638'])
 
 
-fluxcal = '0'
+fluxcal = '0' # The flux calibrator
 
         
-phasecal = '1'
+phasecal = '1' # The phase calibrator 
 
-srcfield = '2'
+srcfield = '2' # The target source
 
 FOIfields = srcfield+','+phasecal+','+fluxcal #fields of interest
 
@@ -110,35 +110,22 @@ time.asctime
 print ""
 print '------------Cleaning up old files ('+prefix+'*)--------------'
 print "=============================================================="
-# clean up old files
+# clean up old files if they exist
 
 os.system('rm -rf '+prefix+'_*')
 
 #
 #===================================================================
-# listobs to find out obs srcs ...
+# listobs to find out the main information about the observation
 #
 print "=============================================================="
 print "Listobs"
-#print "=============================================================="
+
 
 default('listobs')
 listobs(vis = msfile)
 
-#print "==============================================================" 
-print "\033[1;48mUse listobs (outputted in the logger) to find the field names\033[1;m"
-print "=============================================================="
-
-#if scriptmode: 
-    #user_check=raw_input('Return to continue script <==|\n')
-
-print "=============================================================="
-print " "
-print "Extract various useful quantities ...."
-print "These are not fully used right now but shall be in the future..."
-print "Taken from Lazio's script and tweaked for KAT-7"
-print " "
-print "=============================================================="
+# Opening the measurement file (MS)
 
 tb.open(msfile)
 uvw=tb.getcol('UVW')
@@ -159,6 +146,7 @@ channel_width=tb.getcol("CHAN_WIDTH")
 num_chan=tb.getcol("NUM_CHAN")
 tb.close()
 
+# Remove the # below if you want to see the antenna configeration and the uv coverage.
 
 #plotants(vis=msfile,figfile=prefix+'_antenna_layout.png')
 #plotuv(vis=msfile,figfile=prefix+'_uvcov.png',field='2')
@@ -203,7 +191,7 @@ print "=============================================================="
 
 
 
-
+# The flux density of the flux calibrator is set according to the observed frequency 
 
 setjy(vis=msfile,field=fluxcal,spw='0',scalebychan=True,standard='Perley-Butler 2010', fluxdensity=-1)
 
@@ -230,6 +218,7 @@ plotcal(caltable=gain_table0,xaxis='time',yaxis='phase',field=fluxcal,spw='0',pl
                 figfile=prefix+'_plotcal-Gaincal0-'+fluxcal+'-phase-ants.png',iteration='antenna',subplot=334)
 clearpanel
 
+print ("Delay calibration using the flux calibrator.")
 
 delay_table0=prefix+'.delaycal0'
 
@@ -369,7 +358,9 @@ transfer=[phasecal]
 fluxscale()
 
 
-# Applying calibrations solutions (APPLYCAL)
+
+
+print ("Applying calibrations solutions (APPLYCAL)")
 #
 print '---> Applycal: '+fluxcal
 applycal(vis=msfile,gaintable=[flux_table1,band_pass_table0,delay_table0],spw='0',parang=False,field=fluxcal,gainfield=[fluxcal,''],interp=['nearest','',''],calwt=F)
@@ -395,7 +386,7 @@ os.system('rm -rf Deep_field*')
 
 print '\n----Splitting the source data - for time bin of 10s and channel width of 2' +target_vis
 
-# split for time bin of 10 s and every two channel
+print ("split for time bin of 10 s and every two channel")
 
 split(vis=msfile,outputvis=target_vis,datacolumn='corrected',field=srcfield, spw='0',timebin='10s', width='2')
 
