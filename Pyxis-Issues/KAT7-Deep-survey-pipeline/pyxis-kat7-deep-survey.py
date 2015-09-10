@@ -363,7 +363,7 @@ def cal_DI(msname="$MS", lsm0='$LSM0', timeint=None,freqint=None,smooth=None,sta
     # Use the initial model to do the direction independent calibration.
     
     
-    calibrate_DI(msname,lsm0) # these two are global variables      
+    calibrate_DI(msname,lsm0)     
     im.make_image(restore=True, psf=True, restore_lsm=False)
 
     lsm.pybdsm_search(thresh_pix=5 , thresh_isl=3)
@@ -377,13 +377,13 @@ def cal_DI(msname="$MS", lsm0='$LSM0', timeint=None,freqint=None,smooth=None,sta
     
     
     
-def cal_BM(msname="$MS",lsm0="$LSM0", timeint=None,freqint=None,start=1, stop=5): # you can assign start and stop to None
+def cal_BM(msname="$MS",lsm0="$LSM0", timeint=None,freqint=None,start=1, stop=5): 
     """ Run pipeline on a single MS"""
    
    
     msname, lsm0 = interpolate_locals("msname lsm0")
    
-    calibrate_beam(msname,lsm0,tdlsec='${stefcal.STEFCAL_SECTION3}') # these two are global variables      
+    calibrate_beam(msname,lsm0,tdlsec='${stefcal.STEFCAL_SECTION3}')       
     #im.make_image(restore=True, psf=True, restore_lsm=False) 
     #image=im.RESTORED_IMAGE
 
@@ -430,7 +430,7 @@ def local_variance(lsm="$LSMFINAL",image="${im.RESIDUAL_IMAGE}"):
 
 
 # The final call to run all together. Write "pyxis OUTDIR=GIVEAPPFILENAME run_all" to execute the script  
-def run_all():#msname=None, start=None, stop=None):
+def run_all():
 	
 	info("############## Make image from the data column, Model the sky and dE tag ######################")
 	im.make_image(column="DATA", restore=True, psf=True,restore_lsm=False)
@@ -465,12 +465,12 @@ def run_all():#msname=None, start=None, stop=None):
 	
 	APP_INT(lsmname=LSM0,output=LSM_INTRINSIC)
 	
-	info("############## Do only G+B with beam and then apply dE with beam ######################")
+	info("############## Do only G+B with beam and with beam ######################")
 	cal_BM(lsm0=LSM_INTRINSIC)
 	
 	
 	
-	x.sh("tigger-restore ${im.RESTORED_IMAGE} $LSMFINAL ${im.FULLREST_IMAGE} -f ")
+	x.sh("tigger-restore ${im.RESTORED_IMAGE} $LSM0 ${im.FULLREST_IMAGE} -f ")
 	
 	
 	
