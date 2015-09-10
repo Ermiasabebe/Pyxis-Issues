@@ -169,7 +169,7 @@ def correlation_factor(src,psf,img,pos_sky,step=None):
         # computing th correlation matrix and cf is the correlation factor
         cmatrix = np.corrcoef((data_region,psf_data))
         if len(cmatrix) > 0: 
-        #cf = np.sqrt(sum((np.diag(np.rot90(cmatrix)))**2))/np.sqrt(2.0)
+        
             cf =  (np.diag((np.rot90(cmatrix))**2).sum())**0.5/2**0.5
     else:
           cf = 0.0000001
@@ -180,9 +180,9 @@ def correlation_factor(src,psf,img,pos_sky,step=None):
 
 
 
-def make_clean_model(image="${im.RESTORED_IMAGE}",psf_image="${im.PSF_IMAGE}",lsm0="$LSM0",threshold=8):
+def make_clean_model(image="${im.RESTORED_IMAGE}",psf_image="${im.PSF_IMAGE}",lsm0="$LSM0",threshold=7):
 	
-    image, psf_image, lsm0 = interpolate_locals("image psf_image lsm0 ")
+    image, psf_image, lsm0 = interpolate_locals("image psf_image lsm0")
     lsm.pybdsm_search(image,output=lsm0,threshold=threshold)
     catalog = Tigger.load(lsm0)
     src = catalog.sources
@@ -198,7 +198,7 @@ def make_clean_model(image="${im.RESTORED_IMAGE}",psf_image="${im.PSF_IMAGE}",ls
     catalog.save(lsm0)
   	
 	
- 
+# The direction independent calibration 
  
 def calibrate_DI(msname='$MS', lsmname='$LSM', tdlcon='$TDLCONF', tdlsec='${stefcal.STEFCAL_SECTION}',timeint=None,freqint=None,smooth=None,
               column='$COLUMN', do_dE=False, options={},args=[],**kw):
@@ -233,8 +233,8 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
     stefcal.stefcal(msname,section=tdlsec,diffgains=False, output="CORR_RES",restore=dict(niter=1000),
            restore_lsm=False,apply_only=False, flag_threshold=(1,.5), options=options, args=args,**kw)
            
-    
-    # Direction independent and direction depenendent calibration which considers the dE tags
+# Change apparent flux to intrinsic flux for beam calibration    
+
 def APP_INT(msname="$MS",lsmname="$LSM0",\
                      beams="$BEAM_PATTERN",output="$LSM_INTRINSIC"):
                      
@@ -258,7 +258,7 @@ def APP_INT(msname="$MS",lsmname="$LSM0",\
           --fits-l-axis=$FITS_L_AXIS \
          --fits-m-axis=$FITS_M_AXIS -f --pa-from-ms $MS:${ms.FIELD} --pa-range -45.92,142.19 $lsmname $output")
          
-        
+# Calibate ucing the beam
 
 def calibrate_beam(msname='$MS', lsmname='$LSM0', tdlcon='$TDLCONF', timeint=None,freqint=None,smooth=None,tdlsec='${stefcal.STEFCAL_SECTION3}',
               column='$COLUMN', do_dE=True,options={}, args=[],**kw):
@@ -308,7 +308,7 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
     #stefcal.stefcal(section=tdlsec,diffgains=True, output="CORR_RES",restore=dict(niter=3000),
            #restore_lsm=True,apply_only=False, flag_threshold=(1,0.5),options=options, args=args,**kw)
 
-          
+# Calibrate the direction dependent (differential gain calibration )          
            
 def calibrate_DD(msname='$MS', lsmname='$LSM', tdlcon='$TDLCONF', timeint=None,freqint=None,smooth=None,tdlsec='${stefcal.STEFCAL_SECTION}',
               column='$COLUMN', do_dE=True,options={},args=[],**kw):
@@ -404,11 +404,6 @@ def cal_DD(msname="$MS", lsm0='$LSM0', timeint=None,freqint=None,start=1, stop=5
     #x.sh("tigger-convert --append $LSM $LSM0 $LSMFINAL -f")
     #x.sh("cp -r Deep_field_2.MS Deep_field-cal-10s2ch.MS")
     
-    
-    
-    
-    
-
 
 #The statstical analysis at each extracted source position. It calculates the local variance at each source position.
 
