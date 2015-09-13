@@ -7,7 +7,7 @@ import os
 
 import sys
 
-fitfilenames = glob.glob("*.fits") 
+fitfilenames = glob.glob("*.fits") # The lists of fits files 
 
 
 
@@ -22,7 +22,7 @@ def get_new_beam(filename):
 	sourcedata =  sourcefile[0].data
 	
 	init_freq0  = header['CRVAL3'] # The initial frequency 
-	d_initfreq  = header['CDELT3'] # Cahnnel width 
+	d_initfreq  = header['CDELT3'] # Channel width 
 	nchan = header['NAXIS3'] # channel numbers. It is 304 in our case.
 	newdata = []
 	
@@ -43,8 +43,8 @@ def get_new_beam(filename):
 	for ichan in range(len(new_chan)):
 
 		tmpdata = np.zeros((x,y))
-		
-		factor = init_freq0/new_chan[ichan] # The factor to sacle the beam. If the factor is less than one, it will scale down.
+	# The factor to sacle the beam. If the factor is less than one, it will scale down.	
+		factor = init_freq0/new_chan[ichan] 
 		
 		temp = zoom(sourcedata[ichan,:,:], factor)
 		
