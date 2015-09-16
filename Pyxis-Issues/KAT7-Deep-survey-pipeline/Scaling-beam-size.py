@@ -11,10 +11,10 @@ fitfilenames = glob.glob("*.fits") # The lists of fits files
 
 
 
-def get_new_beam(filename):
+def Get_new_beam(filename):
 
 	
-	sourcefile = pyfits.open(filename)
+	sourcefile = pyfits.open(filename) # Open the simulated fits files 
 
 # The input information about the simulated beam.
 
@@ -35,15 +35,15 @@ def get_new_beam(filename):
 	
 	z,x,y = sourcedata.shape
 	
-	header['CRVAL3'] = new_chan[0]
-	header['CDELT3'] = 781250.0
+	header['CRVAL3'] = new_chan[0] # The newly formed fits file initial frequency 
+	header['CDELT3'] = 781250.0 # The newly formed fits channel width
 	
 	
 	
 	for ichan in range(len(new_chan)):
 
 		tmpdata = np.zeros((x,y))
-	# The factor to sacle the beam. If the factor is less than one, it will scale down.	
+	# The factor to scale the beam. If the factor is less than one, it will scale down.	
 		factor = init_freq0/new_chan[ichan] 
 		
 		temp = zoom(sourcedata[ichan,:,:], factor)
@@ -59,7 +59,7 @@ def get_new_beam(filename):
 
 for i in range(len(fitfilenames)):
     
-    get_new_beam(fitfilenames[i])
+    Get_new_beam(fitfilenames[i])
     
     
 
