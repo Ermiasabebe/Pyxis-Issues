@@ -36,7 +36,7 @@ def Get_new_beam(filename):
 	z,x,y = sourcedata.shape
 	
 	header['CRVAL3'] = new_chan[0] # The newly formed fits file initial frequency 
-	header['CDELT3'] = 781250.0 # The newly formed fits channel width
+	header['CDELT3'] = 781250.0 # The newly formed fits file channel width
 	
 	
 	
