@@ -270,7 +270,7 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
     v.LSM = lsmname
     args = ["${ms.MS_TDL} ${lsm.LSM_TDL}"] + list(args)
     options['pybeams_fits.filename_pattern'] = './kat_beams/KAT7_$$(XY)-chan-304-allfreq-$$(realimag).fits'
-    options['critical_flag_threshold']= 20.0
+    options['critical_flag_threshold']= 50.0
     options['me.e_enable']= 1.0
     options['pybeams_fits.l_axis']=FITS_L_AXIS
     options['pybeams_fits.m_axis']=FITS_M_AXIS
@@ -283,6 +283,8 @@ interpolate_locals('msname lsmname column tdlcon tdlsec')
     options['pybeams_fits.verbose_level']= None
     options['pybeams_fits.sky_rotation']=1
     options['pybeams_fits.spline_order'] = 3
+    options['pybeams_fits.normalize_gains'] = 1   # Normalize the beam to unity
+    options['pybeams_fits.sky_rotation'] = 1  
    
     
     
